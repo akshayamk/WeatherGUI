@@ -5,6 +5,7 @@ import datetime as dt
 
 HEIGHT = 600
 WIDTH = 700
+WEATHER_KEY = '7076bdf1c054072d1fe38b5c092e2b6e'
 
 
 class MakeGUI:
@@ -47,7 +48,7 @@ class MakeGUI:
     
 
 class GetFutureForecast:
-    def format_future_forecast_response(self, forecast, lower_frame, weather_key):
+    def format_future_forecast_response(self, forecast, lower_frame):
         try:
             mylist = tk.Listbox(lower_frame)
             name = forecast['name']
@@ -57,7 +58,7 @@ class GetFutureForecast:
             lat = forecast['coord']['lat']
             lon = forecast['coord']['lon']
             url= 'http://api.openweathermap.org/data/2.5/onecall'
-            params={'APPID': weather_key, 'lat':lat, 'lon':lon, 'exclude':['current,minutely,hourly,alerts'], 'units':'metric'}
+            params={'APPID': WEATHER_KEY, 'lat':lat, 'lon':lon, 'exclude':['current,minutely,hourly,alerts'], 'units':'metric'}
             response = requests.get(url, params=params)
             futureforecast = response.json()
             for i in range(7):
@@ -87,13 +88,12 @@ class GetFutureForecast:
 
 
     def get_future_forecast(self, city, lower_frame):
-        weather_key = '7076bdf1c054072d1fe38b5c092e2b6e'
         url = 'https://api.openweathermap.org/data/2.5/weather'
-        params={'APPID': weather_key, 'q':city, 'units':'metric'}
+        params={'APPID': WEATHER_KEY, 'q':city, 'units':'metric'}
         response = requests.get(url, params=params)
         forecast = response.json()
 
-        self.format_future_forecast_response(forecast, lower_frame, weather_key)
+        self.format_future_forecast_response(forecast, lower_frame)
 
     def __init__(self,userentry,lower_frame):   
         self.lower_frame = lower_frame
@@ -134,9 +134,8 @@ class GetHourlyForecast:
         
     
     def get_forecast(self, city, lower_frame):
-        weather_key = '7076bdf1c054072d1fe38b5c092e2b6e'
         url = 'http://api.openweathermap.org/data/2.5/forecast'
-        params={'APPID': weather_key, 'q':city, 'units':'metric'}
+        params={'APPID': WEATHER_KEY, 'q':city, 'units':'metric'}
         response = requests.get(url, params=params)
         forecast = response.json()
 
@@ -149,7 +148,7 @@ class GetHourlyForecast:
 
 
 class GetCurrentWeather:
-    def format_response(self,weather, lower_frame, weather_key):
+    def format_response(self,weather, lower_frame):
     
         try:
             mylist = tk.Listbox(lower_frame)
@@ -160,7 +159,7 @@ class GetCurrentWeather:
             lat = weather['coord']['lat']
             lon = weather['coord']['lon']
             url= 'http://api.openweathermap.org/data/2.5/air_pollution'
-            params={'APPID': weather_key, 'lat':lat, 'lon':lon}
+            params={'APPID': WEATHER_KEY, 'lat':lat, 'lon':lon}
             response = requests.get(url, params=params)
             airpollution = response.json()
             aqindex = airpollution['list'][0]['main']['aqi']
@@ -186,13 +185,12 @@ class GetCurrentWeather:
     def get_weather(self,city,lower_frame):
         #print("Button clicked, " + entry)
         #api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
-        weather_key = '7076bdf1c054072d1fe38b5c092e2b6e'
         url = 'https://api.openweathermap.org/data/2.5/weather'
-        params={'APPID': weather_key, 'q':city, 'units':'metric'}
+        params={'APPID': WEATHER_KEY, 'q':city, 'units':'metric'}
         response = requests.get(url, params=params)
         weather = response.json()
 
-        self.format_response(weather, lower_frame, weather_key)
+        self.format_response(weather, lower_frame)
 
     def __init__(self, userentry,lower_frame):
         self.lower_frame = lower_frame
